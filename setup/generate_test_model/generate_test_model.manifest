@@ -1,0 +1,8 @@
+{
+  "autodeskProduct": "Fusion360",
+  "type": "Script",
+  "engine": "Python",
+  "scriptFiles": ["generate_test_model.py"],
+  "supportedOS": "windows|mac",
+  "editEnabled": true
+}

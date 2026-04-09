@@ -1,40 +1,38 @@
-# ════════════════════════════════════════════════════════════════════════════
-# ADIE Docker Environment
-# Preserves the pythonocc-core, PyMuPDF, and generative AI toolchain.
-# ════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
+# ADIE — Backend Container
+# Python 3.10 + conda (required for pythonocc-core) + FastAPI + Gemini SDK
+# ═══════════════════════════════════════════════════════════════════════════════
 
 FROM continuumio/miniconda3:latest
 
-# Set up working directory
 WORKDIR /app
 
-# Install system dependencies (GL lib required for pythonocc-core)
-RUN apt-get update && apt-get install -y \
-    libgl1-mesa-glx \
+# ── System libs required by pythonocc-core (OpenGL / X rendering) ─────────────
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1 \
     libglu1-mesa \
     libxext6 \
     libxrender1 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy environment files
-COPY environment.yml requirements.txt ./
+# ── Conda environment (installs pythonocc-core from conda-forge) ──────────────
+COPY environment.yml ./
+RUN conda env create -f environment.yml && conda clean -afy
 
-# 1. Create the conda environment with pythonocc-core
-RUN conda env create -f environment.yml
-
-# 2. Install pip dependencies directly into the conda environment path
-# We run pip inside the virtual environment explicitly to avoid pathing issues
+# ── Pip dependencies (FastAPI stack + AI SDK) ─────────────────────────────────
+COPY requirements.txt ./
 RUN /opt/conda/envs/adie/bin/pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the project
-COPY . /app/
-
-# Set the default shell to use the adie conda environment
-SHELL ["conda", "run", "-n", "adie", "/bin/bash", "-c"]
-
-# Make sure all bash calls inside docker use conda adie as default environment
-RUN echo "conda activate adie" >> ~/.bashrc
+# Always use the adie conda environment
 ENV PATH="/opt/conda/envs/adie/bin:$PATH"
 
-# Setup entrypoint so that when container runs, it lands in the adie env
-CMD ["/bin/bash"]
+# ── Copy project source ───────────────────────────────────────────────────────
+COPY . /app/
+
+# ── Ensure runtime data directories exist ─────────────────────────────────────
+RUN mkdir -p data/step_exports validation_scripts standards
+
+# ── FastAPI backend on 0.0.0.0:8000 ──────────────────────────────────────────
+EXPOSE 8000
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]

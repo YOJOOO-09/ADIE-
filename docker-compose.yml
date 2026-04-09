@@ -1,16 +1,38 @@
-version: '3.8'
-
 services:
-  adie-core:
-    build: .
-    container_name: adie_isolated_env
+
+  # ── Python Backend (FastAPI + pythonocc + Gemini) ───────────────────────────
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: adie_backend
+    ports:
+      - "8000:8000"
     volumes:
-      # Mount the project directory natively so JSON outputs sync with host
-      - .:/app
+      # Sync live data files with the host so Fusion 360 (on host) can write
+      # violations.json and the container immediately serves the updated data.
+      - ./data:/app/data
+      - ./validation_scripts:/app/validation_scripts
+      - ./standards:/app/standards
     environment:
-      # Automatically sync the Gemini API Key into the container if hosted in shell
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
-    stdin_open: true
-    tty: true
-    # Command keeps the container alive so we can bash into it whenever we want
-    command: tail -f /dev/null
+      - ADIE_MODEL=${ADIE_MODEL:-gemini-2.0-flash}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/rules"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  # ── React Dashboard (nginx static + /api proxy) ──────────────────────────────
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: adie_frontend
+    ports:
+      - "3001:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped

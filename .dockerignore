@@ -1,0 +1,33 @@
+# Git
+.git
+.gitignore
+
+# Python caches
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+
+# Node / frontend build artifacts (rebuilt inside Dockerfile.frontend)
+frontend/node_modules
+frontend/dist
+
+# Large binary / data files
+standards/*.pdf
+data/step_exports
+
+# Local env & secrets (injected via docker-compose environment:)
+.env
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode
+.idea
+*.swp
+
+# Fusion 360 add-in installs (not needed in container)
+fusion_addin/__pycache__
+ADIE/__pycache__

@@ -1,0 +1,10 @@
+{
+  "autodeskProduct": "Fusion360",
+  "type": "addin",
+  "author": "Aryn Gahlot",
+  "description": {
+    "": "ADIE — Autonomous Design Integrity Engine. Validates CAD designs against engineering standards extracted from PDF documents using Gemini 1.5 Flash. Agents: Analyst (PDF→rules), Synthesizer (rules→scripts), Monitor (live deterministic check), Mitigation (HITL AI fix)."
+  },
+  "supportedOS": "windows|mac",
+  "editEnabled": true
+}
