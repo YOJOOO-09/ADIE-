@@ -1,0 +1,57 @@
+# ADIE — .gitignore
+
+# ── Environment & secrets ─────────────────────────────────────────────────────
+.env
+.env.*
+*.key
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# ── Conda / venv ──────────────────────────────────────────────────────────────
+.conda/
+env/
+venv/
+.venv/
+
+# ── ADIE runtime data (generated, not source) ─────────────────────────────────
+data/violations.json
+data/pending_suggestion.json
+data/step_exports/
+data/adie.log
+
+# Keep these (they're source / config):
+# data/rules.json          ← keep (seed rules)
+# data/audit_log.json      ← keep (liability record — commit it!)
+# data/failed_chunks.log   ← keep for debugging
+# data/uncompiled_rules.log
+# data/script_errors.log
+
+# ── Validation scripts (auto-generated — optionally commit seeds) ─────────────
+# Uncomment if you want to exclude auto-generated scripts:
+# validation_scripts/
+
+# ── Standards PDFs ────────────────────────────────────────────────────────────
+# Large PDFs probably shouldn't be in git
+standards/*.pdf
+
+# ── IDEs ──────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.sublime-*
+*.swp
+*.swo
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini

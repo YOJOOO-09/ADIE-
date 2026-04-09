@@ -1,0 +1,13 @@
+# ADIE — pip requirements (install AFTER conda create + pythonocc)
+# Usage:
+#   conda activate adie
+#   pip install -r requirements.txt
+#
+# NOTE: Do NOT install pythonocc-core via pip.
+# Install it via conda:  conda install -c conda-forge pythonocc-core
+
+pymupdf>=1.23.0
+google-generativeai>=0.5.0
+python-dotenv>=1.0.0
+pytest>=8.0.0
+pytest-timeout>=2.2.0

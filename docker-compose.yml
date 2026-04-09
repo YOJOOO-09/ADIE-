@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  adie-core:
+    build: .
+    container_name: adie_isolated_env
+    volumes:
+      # Mount the project directory natively so JSON outputs sync with host
+      - .:/app
+    environment:
+      # Automatically sync the Gemini API Key into the container if hosted in shell
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+    stdin_open: true
+    tty: true
+    # Command keeps the container alive so we can bash into it whenever we want
+    command: tail -f /dev/null

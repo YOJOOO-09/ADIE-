@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ADIE Violations Report — Utility Knife 2025</title>
+  <style>
+    :root {
+      --bg:        #0d1117;
+      --surface:   #161b22;
+      --border:    #30363d;
+      --text:      #e6edf3;
+      --muted:     #8b949e;
+      --critical:  #f85149;
+      --warning:   #d29922;
+      --info:      #388bfd;
+      --pass:      #3fb950;
+      --accent:    #58a6ff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      line-height: 1.6;
+      padding: 32px 24px;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 8px;
+    }
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+    .logo span { color: var(--muted); font-weight: 400; font-size: 16px; }
+    h1 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+    .stat-card .count {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-card .label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-card.critical .count { color: var(--critical); }
+    .stat-card.warning  .count { color: var(--warning);  }
+    .stat-card.info     .count { color: var(--info);     }
+    .stat-card.pass     .count { color: var(--pass);     }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 12px;
+    }
+    .violation-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      transition: border-color 0.15s;
+    }
+    .violation-card.critical { border-left-color: var(--critical); }
+    .violation-card.warning  { border-left-color: var(--warning);  }
+    .violation-card.info     { border-left-color: var(--info);     }
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .severity-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .severity-badge.critical { background: rgba(248,81,73,0.15);  color: var(--critical); }
+    .severity-badge.warning  { background: rgba(210,153,34,0.15); color: var(--warning);  }
+    .severity-badge.info     { background: rgba(56,139,253,0.15); color: var(--info);     }
+    .rule-id { font-weight: 600; color: var(--accent); font-size: 15px; }
+    .body-name { color: var(--muted); font-size: 13px; }
+    .detail { color: var(--text); margin-bottom: 10px; }
+    .metrics {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .metric {
+      background: rgba(255,255,255,0.04);
+      border-radius: 6px;
+      padding: 4px 12px;
+      font-size: 12px;
+    }
+    .metric .mlabel { color: var(--muted); margin-right: 4px; }
+    .metric .mval   { color: var(--text);  font-weight: 600; }
+    .metric .mval.bad { color: var(--critical); }
+    .metric .mval.ok  { color: var(--pass); }
+    .no-violations {
+      text-align: center;
+      padding: 48px;
+      color: var(--pass);
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .no-violations small { display: block; color: var(--muted); font-weight: 400; margin-top: 6px; font-size: 13px; }
+    footer {
+      margin-top: 40px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">ADIE <span>Autonomous Design Integrity Engine</span></div>
+  </header>
+  <h1>Violations Report — Utility Knife 2025</h1>
+  <div class="meta">Generated: 2026-04-09 08:33 UTC · Design: Utility Knife 2025 · Total rules checked: 8</div>
+
+  <div class="summary-grid">
+    <div class="stat-card critical">
+      <div class="count">0</div>
+      <div class="label">Critical</div>
+    </div>
+    <div class="stat-card warning">
+      <div class="count">0</div>
+      <div class="label">Warning</div>
+    </div>
+    <div class="stat-card info">
+      <div class="count">0</div>
+      <div class="label">Info</div>
+    </div>
+    <div class="stat-card pass">
+      <div class="count">8</div>
+      <div class="label">Rules&nbsp;OK</div>
+    </div>
+  </div>
+
+  <div class="no-violations">✅ Design is fully compliant<small>All rules passed on last validation run.</small></div>
+
+  <footer>
+    ADIE · Developer: Aryn Gahlot, RCOEM Nagpur ·
+    AI: Gemini 1.5 Flash · CAD: Autodesk Fusion 360
+  </footer>
+</body>
+</html>
